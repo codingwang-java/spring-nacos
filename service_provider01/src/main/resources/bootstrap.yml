@@ -1,10 +1,15 @@
 server:
-  address: 127.0.0.1:9526
   port: 9526
 spring:
   application:
-    name: service_provider
+    name: provider
   cloud:
     nacos:
       config:
         server-addr: 127.0.0.1:8848
+        enabled: true
+      discovery:
+        server-addr: 127.0.0.1:9526
+        service: provider
+        enabled: true
+        group: DEFAULT_GROUP

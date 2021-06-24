@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @description
  * @create 2021-06-23 15:23
  **/
-@FeignClient("test_provider")
+@FeignClient("provider")
 public interface OpenFeignInterface {
     @GetMapping("/test")
     String getAppName();

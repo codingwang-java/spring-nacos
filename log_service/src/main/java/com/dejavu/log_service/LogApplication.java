@@ -1,8 +1,8 @@
 package com.dejavu.log_service;
 
-import com.alibaba.nacos.spring.context.annotation.discovery.EnableNacosDiscovery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author dejavu
@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @create 2021-06-23 11:02
  **/
 @SpringBootApplication
-@EnableNacosDiscovery
+@EnableDiscoveryClient
 public class LogApplication {
     public static void main(String[] args) {
         SpringApplication.run(LogApplication.class,args);
