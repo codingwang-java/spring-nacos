@@ -36,14 +36,14 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
         threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.setThreadNamePrefix("wss-heartbeat-thread-");
         threadPoolTaskScheduler.initialize();
-        registry.enableSimpleBroker("/queue","/user")
+        registry.enableSimpleBroker("/queue","/topic","/broadcast")
                 .setHeartbeatValue(new long[]{10000,10000})
                 .setTaskScheduler(threadPoolTaskScheduler);
-        registry.setApplicationDestinationPrefixes("/dejavu");
+        registry.setApplicationDestinationPrefixes("");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(endPoint).setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint(endPoint).setAllowedOrigins("*");
     }
 }
