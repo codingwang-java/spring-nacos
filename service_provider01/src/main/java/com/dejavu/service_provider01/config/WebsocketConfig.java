@@ -4,7 +4,6 @@ import com.dejavu.service_provider01.interceptor.SubscribInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -36,10 +35,11 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
         threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.setThreadNamePrefix("wss-heartbeat-thread-");
         threadPoolTaskScheduler.initialize();
-        registry.enableSimpleBroker("/queue","/topic","/broadcast")
+        registry.enableSimpleBroker("/queue","/topic","/indicator","/broadcast")
                 .setHeartbeatValue(new long[]{10000,10000})
                 .setTaskScheduler(threadPoolTaskScheduler);
         registry.setApplicationDestinationPrefixes("");
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override

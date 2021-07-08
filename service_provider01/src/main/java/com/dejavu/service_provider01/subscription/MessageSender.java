@@ -18,16 +18,17 @@ import javax.annotation.Resource;
 public class MessageSender {
     @Resource
     private SimpMessagingTemplate simpMessagingTemplate;
-    public void sendSpecifyMessage(String sessionId,Object message){
+    public void sendSpecifyMessage(String sessionId,String destination,Object message){
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId("");
+        headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
-        headerAccessor.setNativeHeader("","");
+        headerAccessor.setDestination(destination);
+        headerAccessor.setNativeHeader("reqId","2");
         log.info("sendMessage {} to {}",message,sessionId);
-        simpMessagingTemplate.convertAndSendToUser(sessionId,"/queue/all",message,headerAccessor.getMessageHeaders());
+        simpMessagingTemplate.convertAndSendToUser(sessionId,destination,message,headerAccessor.getMessageHeaders());
     }
 
-    public void sendMessage(Object message){
-        simpMessagingTemplate.convertAndSend("/queue/all",message);
+    public void sendMessage(String destination,Object message){
+        simpMessagingTemplate.convertAndSend(destination,message);
     }
 }

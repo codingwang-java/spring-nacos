@@ -2,12 +2,15 @@ package com.dejavu.service_provider01.subscription;
 
 import com.alibaba.nacos.common.model.RestResult;
 import com.alibaba.nacos.common.model.RestResultUtils;
+import com.dejavu.service_provider01.anno.ResponseToUser;
 import com.dejavu.tools.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
@@ -57,19 +60,44 @@ public class ClientSubscribe {
         return "111";
     }
 
-    @SubscribeMapping("/queue/all/subscribe")
+    @SubscribeMapping("/queue/message")
     public RestResult broadcast(StompHeaderAccessor stompHeaderAccessor){
         new Thread(()->{
-            for(int i =0;i<2;i++) {
+            for(int i =0;i<3;i++) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                messageSender.sendMessage("ok");
+                messageSender.sendSpecifyMessage(stompHeaderAccessor.getSessionId(),"/queue/message","user");
             }
         }).start();
 
+        return RestResultUtils.success("connection established");
+
+    }
+    @MessageMapping("/send/message")
+    @ResponseToUser
+    public RestResult publish(String s,StompHeaderAccessor stompHeaderAccessor){
+
+        return RestResultUtils.success("connection established");
+
+    }
+
+    @SubscribeMapping("/broadcast/all")
+    public RestResult broadcastAll(StompHeaderAccessor stompHeaderAccessor) throws InterruptedException {
+        log.info("destination{}",stompHeaderAccessor.getDestination());
+        new Thread(()->{
+            for(int i =0;i<5;i++) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                messageSender.sendMessage("/broadcast/all","ok");
+            }
+        }).start();
+        Thread.sleep(1000);
         return RestResultUtils.success("connection established");
 
     }

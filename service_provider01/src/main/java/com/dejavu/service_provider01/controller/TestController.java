@@ -26,7 +26,7 @@ public class TestController {
     public void testSendMessage() throws InterruptedException {
 
         while (true) {
-            messageSender.sendMessage("ok");
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
