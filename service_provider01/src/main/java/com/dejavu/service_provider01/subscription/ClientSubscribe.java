@@ -76,6 +76,13 @@ public class ClientSubscribe {
         return RestResultUtils.success("connection established");
 
     }
+
+    /**
+     * websocket类似http请求-响应方法实现
+     * @param s
+     * @param stompHeaderAccessor
+     * @return
+     */
     @MessageMapping("/send/message")
     @ResponseToUser
     public RestResult publish(String s,StompHeaderAccessor stompHeaderAccessor){
@@ -84,6 +91,12 @@ public class ClientSubscribe {
 
     }
 
+    /**
+     * websocket 广播模式，订阅后自动推送
+     * @param stompHeaderAccessor
+     * @return
+     * @throws InterruptedException
+     */
     @SubscribeMapping("/broadcast/all")
     public RestResult broadcastAll(StompHeaderAccessor stompHeaderAccessor) throws InterruptedException {
         log.info("destination{}",stompHeaderAccessor.getDestination());
@@ -100,5 +113,17 @@ public class ClientSubscribe {
         Thread.sleep(1000);
         return RestResultUtils.success("connection established");
 
+    }
+
+    /**
+     * websocket异步请求实现
+     * @param o
+     * @param stompHeaderAccessor
+     * @return
+     */
+    @MessageMapping("/send/message")
+    @SendToUser("/queue/all")
+    public RestResult originPublish(Object o,StompHeaderAccessor stompHeaderAccessor){
+        return RestResultUtils.success();
     }
 }
